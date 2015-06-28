@@ -1,0 +1,36 @@
+Latest Versions (v1.08): <br />
+&nbsp;&nbsp;Installer - v1.06 <br />
+&nbsp;&nbsp;Directory Explorer - v1.06 <br />
+&nbsp;&nbsp;EDEupdatehelper - v1.04 <br />
+ <br /> <br />
+Changelog v1.08: <br />
+&nbsp;&nbsp;Installer v1.06: <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Update Installer now also updates the update helper file. <br />
+&nbsp;&nbsp;EDEupdatehelper v1.04 <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Now retrieves source files from new directory. <br />
+&nbsp;&nbsp;
+ <br /> <br />
+Changelog v1.07: <br />
+&nbsp;&nbsp;Installer v1.05: <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Changes to the ways the buttons work. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Now tells user if the key is wrong. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Security flaw fixed. <br />
+&nbsp;&nbsp;Directory Explorer v1.06 <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Fixed the sorting error, links weren't pointing the right way. <br />
+&nbsp;&nbsp;EDEupdatehelper v1.03 <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Now preserves the key during the update. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Security flaw fixed. <br />
+&nbsp;&nbsp;
+ <br /> <br />
+Changelog v1.06: <br />
+&nbsp;&nbsp;Installer v1.04: <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Added a new function that enables you to update your installer to the latest version from the hosting server. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Added two new buttons to quickly navigate to index.php and dir.php <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Added a required checkbox to make sure you agree to the terms that were also added during this update. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- Added a changelog viewer so you can check if you're up to date, and what was changed or added. <br />
+&nbsp;&nbsp;Directory Explorer v1.05 <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- You can now sort the files by extension, sub-sorting by other parameters may be added later, but don't hold your breath. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- If you add ?t=c to the end of the URL you can load the page with the subdirectory lists closed. Useful for those longer pages. <br />
+&nbsp;&nbsp;EDEupdatehelper v1.01 <br />
+&nbsp;&nbsp;&nbsp;&nbsp;- EDEupdatehelper was added. It will likely remain unchanged for now. <br />
+&nbsp;&nbsp;

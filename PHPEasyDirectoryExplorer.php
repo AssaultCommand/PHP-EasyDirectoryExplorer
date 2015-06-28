@@ -1,0 +1,370 @@
+<!--
+PHP Easy File Explorer
+Author: Caspar Neervoort
+Creative Commons Attribution-NoDerivatives 4.0 International License.
+
+REQUIRES: PHP 5.3 or higher.
+You may use this anywhere and in any way you want, as long as you don`t alter the license information.
+If you want to adapt this script, please contact me for permission and further information.
+
+INSTRUCTIONS:
+To get the intall key of $installKey below this line in the source of this file.
+<?php $installKey = '00100'; //Change 00100 to a custom key once as soon as you can! ?>
+Remember to change this key once you`ve installed PHP Easy Directory Explorer!
+-->
+
+<html>
+<head>
+	<title>Install Easy Directory Explorer</title>
+	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+	<style>
+		body
+		{
+			margin: 0;
+		}
+		h1
+		{
+			font-family: Arial, Verdana, sans-serif;
+		}
+		p
+		{
+			font-family: Arial, Verdana, sans-serif;
+			font-size: 12px;
+			margin-top: 10px;
+			margin-bottom: 12px;
+		}
+		legend
+		{
+			font-family: Arial, Verdana, sans-serif;
+			font-size: 12px;
+			margin-top: 10px;
+			margin-bottom: 12px;
+		}
+		#header
+		{
+			z-index: 500;
+			padding-left: 5px; 
+			padding-top: 5px; 
+		}
+		.legalstuff
+		{
+			color: #999;
+		}
+		#changelog
+		{
+			display: none; 
+		}
+		.footerText
+		{
+			color: #999;
+		}
+		ul
+		{
+			margin: 0; 
+			padding: 0;
+			list-style-type: none;
+		}
+		
+		ul li a
+		{
+			text-decoration: none;
+			border-top: #ccc solid 1px;
+			color: #315ADD; 
+			padding: 10px 11px;
+			background: #ddd;
+			display:block;
+		}
+		
+		ul li a:hover
+		{
+			background-color: #ededed;
+		}
+	</style>
+	<script>
+		function pingInfo(link, callback) 
+		{
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("GET", link, true);
+		    xhr.onreadystatechange = function() 
+		    {
+		        if (xhr.readyState === 4) 
+		        {
+		            callback(xhr.responseText);
+		        }
+		    };
+		    xhr.send(null);
+		}
+		
+		function installEDE()
+		{
+			key = document.getElementById("key").value
+			if(document.getElementById("sub").checked) {sub = '1';} else {sub = '0';}
+			if(document.getElementById("ind").checked) {ind = '1';} else {ind = '0';}
+			if(document.getElementById("rmv").checked) {rmv = '1';} else {rmv = '0';}
+			if(!document.getElementById("lgl").checked) {alert('You need to agree to the legal terms in order to continue!'); return;}
+			if(document.getElementById("key").value == '') {alert('You need to enter a key in order to continue!'); return;}
+			
+			location = 'PHPEasyDirectoryExplorer.php?key=' + key + '&sub=' + sub+ '&ind=' + ind + '&rmv=' + rmv;
+		}
+		
+		function updateInstaller()
+		{
+			key = document.getElementById("key").value
+			if(document.getElementById("key").value == '') {alert('You need to enter a key in order to continue!'); return;}
+			location = 'PHPEasyDirectoryExplorer.php?upd=' + key;
+		}
+		
+		function getChangelog()
+		{
+			pingInfo('http://www.armorwatcher.com/PHPEasyDirectoryExplorer/Sources/changelog.txt', function(text) 
+			{
+				document.getElementById('changelog').style.display = "block";
+				document.getElementById('changelog').innerHTML = "<p>Current version: <b>v1.08</b><br /><br />" + text + "</p>";
+			});
+		}
+	</script>
+</head>
+<body>
+	<div id="header">
+	<h1>Install PHP Easy Directory Explorer</h1>
+	<p>
+	<?php
+	function installDirs($dir, $indexName, $source) //Install in subdirectories
+	{
+		$dirfiles1 = scandir($dir);
+		
+		foreach($dirfiles1 as $dirfile)
+		{	
+			if(is_dir($dir.'/'.$dirfile)) 
+			{
+				if($dirfile != '.' && $dirfile != '..')
+				{
+					echo 'Installing into subdirectories as '.$indexName.'...<br />';
+					file_put_contents($dir.'/'.$dirfile.'/'.$indexName, $source);
+					echo 'Installation into '.$dir.'/'.$dirfile.' complete!<br /><br />';
+					installDirs($dir.'/'.$dirfile, $indexName, $source);
+				}
+			}
+		}
+	}
+	
+	function removeDirs($dir, $indexName) //Remove from subdirectories
+	{
+		$dirfiles1 = scandir($dir);
+		
+		foreach($dirfiles1 as $dirfile)
+		{	
+			if(is_dir($dir.'/'.$dirfile)) 
+			{
+				if($dirfile != '.' && $dirfile != '..')
+				{
+					echo 'Removing '.$indexName.' from subdirectory...<br />';
+					try
+					{
+						unlink($dir.'/'.$dirfile.'/'.$indexName);
+						echo 'Removal from '.$dir.'/'.$dirfile.' complete!<br /><br />';
+					}
+					catch(Exception $e)
+					{
+						echo 'Removal from '.$dir.'/'.$dirfile.' failed!<br />';
+						echo 'This is likely caused because the file does not exist.<br />';
+						echo 'If this is not the case, and the file is still present, please contact the author with the following error:<br />';
+						echo $e.'<br /><br />';
+					}
+					removeDirs($dir.'/'.$dirfile, $indexName, $source);
+				}
+			}
+		}
+	}
+	
+	if($_GET['ind'] == 1)
+	{
+		$indexName = 'index.php';
+	}
+	else if($_GET['ind'] == 0)
+	{
+		$indexName = 'dir.php';
+	}
+	
+	if($installKey == $_GET['key'] && $_GET['rmv'] == 1)
+	{
+		echo '		Removing PHP Easy Directory Explorer for you...
+				<br />
+				Options: Including subdirectories, Removing '.$indexName.'.
+				<br />
+				<br />
+			</p>
+		</div>
+		<fieldset class="formField">
+			<legend>Progress...</legend>
+			<p>';
+			
+			echo 'Removing '.$indexName.' from current directory...<br />';
+			try
+			{
+				unlink($indexName);
+				echo 'Removal from current directory complete!<br /><br />';
+			}
+			catch(Exception $e)
+			{
+				echo 'Removal from current directory failed!<br />';
+				echo 'This is likely caused because the file does not exist.<br />';
+				echo 'If this is not the case, and the file is still present, please contact the author with the following error:<br />';
+				echo $e.'<br /><br />';
+			}
+			
+			removeDirs('.', $indexName);
+			echo 'Removal complete!<br />';
+		echo '	</p>
+		</fieldset>';
+	}
+	else if($installKey == $_GET['key'] && $_GET['sub'] == 1)
+	{
+		echo '		Installing PHP Easy Directory Explorer for you...
+				<br />
+				Options: Including subdirectories, Install as '.$indexName.'.
+				<br />
+				<br />
+			</p>
+		</div>
+		<fieldset class="formField">
+			<legend>Progress...</legend>
+			<p>';
+			echo 'Getting source file contents...<br />';
+			$source = file_get_contents('http://www.armorwatcher.com/PHPEasyDirectoryExplorer/Sources/index.txt');
+			echo 'Source file read into memory<br /><br />';
+			
+			echo 'Installing into current directory as '.$indexName.'...<br />';
+			file_put_contents($indexName, $source);
+			echo 'Installation into current directory complete!<br /><br />';
+			
+			installDirs('.', $indexName, $source);
+			echo 'Installation complete!<br />';
+		echo '	</p>
+		</fieldset>';
+	}
+	else if($installKey == $_GET['key'] && $_GET['sub'] == 0)
+	{
+		echo '		Installing PHP Easy Directory Explorer for you...
+				<br />
+				Options: No subdirectories, Install as '.$indexName.'.
+				<br />
+				<br />
+			</p>
+		</div>
+		<fieldset class="formField">
+			<legend>Progress...</legend>
+			<p>';
+			echo 'Getting source file contents...<br />';
+			$source = file_get_contents('http://www.armorwatcher.com/PHPEasyDirectoryExplorer/Sources/index.txt');
+			echo 'Source file read into memory<br /><br />';
+			
+			echo 'Installing into current directory as '.$indexName.'...<br />';
+			file_put_contents($indexName, $source);
+			echo 'Installation complete!<br />';
+		echo '	</p>
+		</fieldset>';
+	}
+	else if($installKey == $_GET['upd'])
+	{
+		$source = file_get_contents('http://www.armorwatcher.com/PHPEasyDirectoryExplorer/Sources/EDEupdatehelper.txt');
+		file_put_contents('./EDEupdatehelper.php', $source);
+		echo '<script>location = \'./EDEupdatehelper.php\';</script>';
+	}
+	else if(isset($_GET['key']) && $installKey != $_GET['key'])
+	{
+		echo '<script>alert(\'That key was not valid!\nCould not install.\');</script>';
+		echo '<script>location = \'./PHPEasyDirectoryExplorer.php\'</script>';
+	}
+	else if(isset($_GET['upd']) && $installKey != $_GET['upd'])
+	{
+		$source = file_get_contents('http://www.armorwatcher.com/PHPEasyDirectoryExplorer/Sources/EDEupdatehelper.txt');
+		file_put_contents('./EDEupdatehelper.php', $source);
+		echo '<script>alert(\'That key was not valid!\nCould not update.\');</script>';
+		echo '<script>location = \'./PHPEasyDirectoryExplorer.php\'</script>';
+	}
+	else
+	{
+		echo '		Enter your custom key to install or update PHP Easy Directory Explorer in the current and all subdirectories.
+				<br />
+				You can find your key by following the instructions in the commented section at the beginning of this document.
+				<br />
+				<br />
+				<b>REMEMBER TO CHANGE YOUR KEY ONCE YOU\'VE FINISHED INSTALLING!</b>
+				<br />
+				Failure to do so may result in <u>a loss of files</u> if people figure out you\'re using the default key, which is 00100.
+				<br />
+				<br />
+				<b>Current relative path: '.$_SERVER['PHP_SELF'].'</b>
+				<br />
+				<br />
+			</p>
+		</div>
+		<fieldset class="formField">
+			<legend>Install / Update</legend>
+			<p>
+				Key:
+				<br />
+				<input id="key" type="text" required="">
+				<br />
+				<br />
+				<input id="sub" type="checkbox" value="1">
+				<label for="sub"> Include subdirectories?</label>
+				<br />
+				<br />
+				<input id="ind" type="checkbox" value="1">
+				<label for="index"> Install as index.php? (default is dir.php. This WILL overwrite any current files of the same name!)</label>
+				<br />
+				<br />
+				<input id="rmv" type="checkbox" value="1">
+				<label for="rmv"> Uninstall? (make sure the above setting was the same as during install!) </label>
+				<br />
+				<br />
+				<input id="lgl" type="checkbox" value="1" required="">
+				I understand and agree with the terms below:
+				<span class="legalstuff">
+				<br /> 
+				You understand and agree that the author will not be held responsible for what you, the user, do with this product.
+				<br /> 
+				In the event of any lost data or other inconveniences, the user is at fault for not reading or following the instructions properly.
+				<br /> 
+				Using this product is at your own risk.
+				</span>
+			</p>
+			<button onclick="installEDE();">Install/Update</button>
+		</fieldset>';
+	}
+
+	?>
+	
+	<br />
+	<fieldset>
+		<legend>Other functions:</legend>
+		<button onclick="updateInstaller();">Update Installer</button>
+		<button onclick="getChangelog();">Get Changelog</button>
+		<button onclick="window.location = 'index.php';">Go to index.php</button>
+		<button onclick="window.location = 'dir.php';">Go to dir.php</button>
+	</fieldset>
+	<fieldset id="changelog">
+	</fieldset>
+	<br />
+	<br />
+	<p class="footerText">
+		<a rel="license" href="http://creativecommons.org/licenses/by-nd/4.0/deed.en_US">
+			<img alt="Creative Commons License" style="border-width:0;" src="http://i.creativecommons.org/l/by-nd/4.0/80x15.png" />
+		</a>
+		&nbsp;&nbsp;
+		<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">
+			PHP Easy Directory Explorer
+		</span> 
+		by 
+		<a xmlns:cc="http://creativecommons.org/ns#" href="https://twitter.com/__Caspar__" property="cc:attributionName" rel="cc:attributionURL">
+			Caspar Neervoort
+		</a> 
+		is licensed under a 
+		<a rel="license" href="http://creativecommons.org/licenses/by-nd/4.0/deed.en_US">
+			Creative Commons Attribution-NoDerivatives 4.0 International License
+		</a>.
+	</p>
+</body>
+</html>
